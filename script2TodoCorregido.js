@@ -1,13 +1,4 @@
 /**
- *  CHANGELOG
- *
- *  22/08/2024 - https://app.clickup.com/t/86b0239dq
- *   - Se crea la AC para el ejercicio "Flujo dinámico con Acción de código".
- */
-
-//El changelog no es necesario (no usarlo)
-
-/**
  *  Esta AC recibe un nombre de usuario y busca la dirección correspondiente en una API pública.
  *
  *        - Variables de entrada:
@@ -17,9 +8,10 @@
  *               1. Se obtiene exitosamente la dirección:
  *                  - GET_ADDRESS_RESULT = ADDRESS_OBTAINED
  *                  - DIRECCION = La dirección obtenida del servicio.
- *               2. No se encontró una dirección:
- *                  - GET_ADDRESS_RESULT = NO_ENCONTRADO
- *                  - DIRECCION = null
+ *
+ *               2. No se encuentra una dirección para el nombre dado: // TODO 1: añadido
+ *                  - GET_ADDRESS_RESULT = SUCURSAL_NO_ENCONTRADA
+ *                  - DIRECCION = null;
  *
  *          - Variables de salida de ERROR:
  *             1. Se produjo un error inesperado en el código:
@@ -30,35 +22,31 @@
  *
  */
 
-/* (1)
 /*------------------------------------------------------------
         NOMBRES DE VARIABLES DE ENTRADA
 ------------------------------------------------------------*/
 const NOMBRE_VAR_NAME = 'nombre';
 
-/* (2)
 /*------------------------------------------------------------
-        NOMBRES DE VARIABLES DE SALIDA //Esta perfecto
+        NOMBRES DE VARIABLES DE SALIDA
 ------------------------------------------------------------*/
 const GET_ADDRESS_RESULT_VAR_NAME = 'GET_ADDRESS_RESULT';
 const DIRECCION_VAR_NAME = 'DIRECCION';
 
 /*------------------------------------------------------------
-        VALORES DE VARIABLES DE SALIDA //Esta perfecto
-
+        VALORES DE VARIABLES DE SALIDA
 ------------------------------------------------------------*/
 const ADDRESS_OBTAINED_VAR_VALUE = 'ADDRESS_OBTAINED';
-const NO_ENCONTRADO_VAR_VALUE = 'NO_ENCONTRADO';
+const SUCURSAL_NO_ENCONTRADA_VAR_VALUE = 'SUCURSAL_NO_ENCONTRADA'; // TODO 1: añadido
 
 /*------------------------------------------------------------
-        VALORES DE VARIABLES DE SALIDA DE ERROR //Esta perfecto
-
+        VALORES DE VARIABLES DE SALIDA DE ERROR
 ------------------------------------------------------------*/
 const ERROR_INESPERADO_VAR_VALUE = 'ERROR_INESPERADO';
-const FALTAN_DATOS_VAR_VALUE = 'FALTAN_DATOS'; //MUY bien el VAR_NAME VAR_VALUE
+const FALTAN_DATOS_VAR_VALUE = 'FALTAN_DATOS';
 
 /* ----------------------------------------------------------------
-                        SERVICE //Cambir SERVICE por credenciales
+                        CREDENCIALES
 ---------------------------------------------------------------- */
 
 const URL = 'https://627303496b04786a09002b27.mockapi.io/mock/sucursales';
@@ -69,32 +57,25 @@ const URL = 'https://627303496b04786a09002b27.mockapi.io/mock/sucursales';
 const LOG = require('helper_logging_gcp');
 const L = LOG.core({
     botName: 'demobleett',
-    actionCode: 'get_user_address', // Agregar mi nombre
+    actionCode: 'get_user_address',
     debugEnabled: true,
 });
 
-const main = async () => { //Esto esta perfecto (bien declarativo se validan datos y se va a la API Todas las casuisteicas bien claras aca) Pocas veces es necesario sacar la logica de las casuisteicas a una funciona esterna y realizar el finalizar con exito fuiera del main
-    // tratar de hacerlo aca si queda muy largo muy complejo recien ahi hacerlo fuera de aca (refactorizar) depende de los tiempos PERO PRIMERO QUE FUNCIONE
+const main = async () => {
     try {
-        bmconsole.log(`Init`);
+        bmconsole.log(Init);
         const nombre = verifyEntryData();
         const response = await getAddress(nombre);
-        const { direccion, found } = response;
 
-        if (!found) {
-            finalizarConExito(NO_ENCONTRADO_VAR_VALUE, 'No se encontró una dirección para el nombre dado');
-            user.set(DIRECCION_VAR_NAME, null);
+        if (!response.direccion) { // TODO 4: no es error, manejar caso sin dirección
+            finalizarConExito(SUCURSAL_NO_ENCONTRADA_VAR_VALUE, 'No se encontró una dirección para el nombre dado');
             return;
         }
 
-        if (_.isEmpty(direccion)) {
-            throwInternalErrorWithCustomLog(ERROR_INESPERADO_VAR_VALUE, 'No se obtuvo la dirección del servicio', direccion);
-        }
-
-        user.set(DIRECCION_VAR_NAME, direccion);
+        user.set(DIRECCION_VAR_NAME, response.direccion);
         finalizarConExito(ADDRESS_OBTAINED_VAR_VALUE, 'Se obtuvo la dirección del usuario');
     } catch (error) {
-        L.error(error);
+        L.error('Error atrapado en función/bloque MAIN', error); // TODO 6: agregado más información al log
         chequearTipoDeError(error);
     }
 };
@@ -115,11 +96,8 @@ const getAddress = async (nombre) => {
         const data = await response.json();
         const filteredItem = data.find((item) => item.nombre.toLowerCase() === nombre.toLowerCase());
 
-        if (!filteredItem) {
-            return { found: false };
-        }
-
-        return { direccion: filteredItem.direccion, found: true };
+        // TODO 7: extraer lógica a main, no es error
+        return { direccion: filteredItem ? filteredItem.direccion : null };
     } catch (error) {
         bmconsole.log(error);
         L.error('Error en función "getAddress"', {
