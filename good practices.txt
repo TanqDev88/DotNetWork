@@ -1,0 +1,2 @@
+1 - Mayúsculas para constantes: Las constantes que contienen valores inmutables ahora están en mayúsculas (como API_URL, USER_VAR_NAME).
+2 - camelCase para funciones y variables locales: Las funciones y variables locales se mantienen en camelCase (como main, obtenerDireccion, verifyEntryData).
