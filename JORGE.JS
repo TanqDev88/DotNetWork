@@ -1,30 +1,27 @@
-function retrieveBranchDirection(branches, nameBranch) {
-    debugMsg('Executing retrieveBranchDirection function');
-    
-    const RESULT_VAR_NAME = "GET_DIRECTION_RESULT";
-    const SUCCESS_VAR_VALUE = "ONE_DIRECTION";
-    const NOT_FOUND_VAR_VALUE = "DIRECTION_NOT_FOUND";
-    const ERROR_VAR_VALUE = "ERROR_INESPERADO";
+function retrieveBranchDirection(sucursales, nameBranch) {
+    debugMsg('corriendo');
+    var ONE_DIRECTION_VAR_VALUE = "ONE_DIRECTION";
+    var DIRECTION_NOT_FOUND_VAR_VALUE = "DIRECTION_NOT_FOUND";
+    var ERROR_INESPERADO_VAR_VALUE = "ERROR_INESPERADO";
 
     if (!isEmpty(nameBranch)) {
-        const branchInfo = branches.filter(branch => 
-            branch.nombre.toLowerCase() === nameBranch.toLowerCase()
-        );
+        var direccion = sucursales.filter(function(sucursal) {
+            return sucursal.nombre.toLowerCase() === nameBranch.toLowerCase();
+        });
 
-        if (!isEmpty(branchInfo)) {
-            setBotVar(RESULT_VAR_NAME, SUCCESS_VAR_VALUE);
-            setBotVar("directionBranch", branchInfo[0].direccion);
-            debugMsg('Branch direction found');
-            goNext('success_branches');          
+        if (!isEmpty(direccion)) {
+            setBotVar("GET_DIRECTION_RESULT", ONE_DIRECTION_VAR_VALUE);
+            setBotVar("directionBranch", direccion[0].direccion);
+            debugMsg('DIREC ENCONTRADA');
+            goNext('succes_branches');          
         } else {
-            setBotVar(RESULT_VAR_NAME, NOT_FOUND_VAR_VALUE);
-            setBotVar("directionBranch", "La sucursal no se encontro.");
+            setBotVar("GET_DIRECTION_RESULT", DIRECTION_NOT_FOUND_VAR_VALUE);
+            setBotVar("directionBranch", "Sucursal no encontrada.");
             goNext('failure_branches');
         }
     } else {
-        setBotVar(RESULT_VAR_NAME, ERROR_VAR_VALUE);
+        setBotVar("GET_DIRECTION_RESULT", ERROR_INESPERADO_VAR_VALUE);
         setBotVar("directionBranch", "El nombre de la sucursal es requerido.");
-        debugMsg('Branch name is empty');
         return false;
     }
 }
