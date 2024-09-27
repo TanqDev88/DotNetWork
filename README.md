@@ -9,18 +9,18 @@
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 
-<a name="technologies"></a> 
-   ## Tecnologías Utilizadas  💻 
+<a name="technologies"></a>
+## Technologies Used 💻
 
 <details>
-    <summary>Click Aquí para Detall ↩️</summary>
-    <br>
-   <p>Tecnologías Utilizada:</p>
+<summary>Click Here for Details ↩️</summary>
+<br>
+<p>Technologies Used:</p>
 <ul>
-  <li>JS: <a href="https://www.javascript.com/">Enlace a la documentación oficial</a></li>
-   <li>Node.js: <a href="https://nodejs.org/en">Enlace a la documentación oficial</a> </li>
-   <li>Express Frameork: <a href="https://expressjs.com/es/">Enlace a la documentación oficial</a></li>
-    <li>Postman: <a href="https://www.postman.com/">Enlace a la documentación oficial</a>
+<li>JS: <a href="https://www.javascript.com/">Link to official documentation</a></li>
+<li>Node.js: <a href="https://nodejs.org/en">Link to official documentation</a> </li>
+<li>Express Framework: <a href="https://expressjs.com/es/">Link to official documentation</a></li>
+<li>Postman: <a href="https://www.postman.com/">Link to official documentation</a>
 </ul>
 
    </details>
