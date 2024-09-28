@@ -24,23 +24,22 @@
 </ul>
 
    </details>
-
- <a name="installation"></a>  
-## Instalación del proyecto
+<a name="installation"></a>
+## Installing the project
 ***
-Clonar el proyecto desde la siguiente URL de Github. 
+Clone the project from the following Github URL.
 ```
 $ git clone https://github.com/TanqDev88/Ejercicios_V2.git
 
 ```
-Instalar las siguientes herramientas de manera local:
+Install the following tools locally:
 ```
 npm install
 npm install express multer csv-parser axios
 npm install moment
 
 ```
-Desde la carpeta donde se clonó el proyecto ejecutar el siguiente comando para levantar el servicio:
+From the folder where the project was cloned, run the following command to start the service:
 ```
 node index.js
 
